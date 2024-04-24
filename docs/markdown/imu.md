@@ -38,7 +38,7 @@ IMU with 9 degrees of freedom is a device that electronically measures and provi
 - Gyrometer - is a sensor designed to gauge the rate of rotation or angular velocity of an object across the three axes of 3D space.Functioning through a minute vibrating component, often a MEMS resonator, it oscillates within a specific frequency range. As the gyro undergoes angular motion, the Coriolis force impacts the resonator, a process detected by sensors positioned around it. These sensors ascertain the rate and direction of angular motion, which is then translated into a digital signal by an electronic circuit. </br>
 - Magnetometer - is a sensor crafted to gauge the intensity of the magnetic field surrounding it across the three axes of 3D space. Its mechanism involves a MEMS (Micro-Electro-Mechanical Systems) device housing a minuscule silicon structure designed to respond to magnetic fields.When the sensor encounters a magnetic field, the silicon structure undergoes movement, detected by capacitive or resistive elements within the MEMS device. This alteration in capacitance/resistance is then detected by an electronic circuit, which transforms it into a digital signal. </br>
 
-### Sensors fusion
+### Sensors Fusion
 -------------------
 To achieve optimal data accuracy, sensor fusion employs specialized algorithms to integrate measurements from multiple sensors of varying types. By merging the strengths of different sensors, this process capitalizes on their respective favorable characteristics, culminating in the attainment of the most precise measurements possible.
 
@@ -111,7 +111,11 @@ ImuData imu_data;
 IMU imu(PB_IMU_SDA, PB_IMU_SCL); 
 ```
 
-`ImuData` is a data structure that is updated as the IMU class thread runs, so an object has been created above to collect and access this data. Use the following commands to access the data, bearing in mind that axis-dependent data should be indexed as follows:
+### Read measurments
+--------------------------------------
+Once the objects have been declared, it is possible to read data from the sensor. As mentioned, this data is processed inside the class with the appropriate filters and, in addition to reading the sensor readings themselves, the position of the tile in space is calculated and expressed in quaternions and Euler angles. As mentioned, the data is collected in a created object which is used to sort the data accordingly.
+
+The `ImuData` object is a data structure that is updated as the `IMU` class thread runs, so an object has been created above to collect and access this data. Use the following commands to access the data, bearing in mind that axis-dependent data should be indexed as follows:
 - X -> 0
 - Y -> 1
 - Z -> 2
@@ -122,5 +126,27 @@ float acc_X_axis = imu_data.acc(0);
 float acc_Y_axis = imu_data.acc(1); 
 float acc_Z_axis = imu_data.acc(2);
 ```
+When reading data from quaternion coefficients, commands are used:
+```
+// quaterions coefficients
+float quatW = imu_data.quat.w();
+float quatX = imu_data.quat.x();
+float quatY = imu_data.quat.y();
+float quatZ = imu_data.quat.z();
+```
+
+When reading the angles in the Eulerian convention, one assumes:
+- roll -> 0
+- pitch -> 1
+- yaw -> 2
+
+```
+// euler angles
+float roll = imu_data.rpy(0);
+float pitch = imu_data.rpy(1);
+float yaw = imu_data.rpy(2);
+```
+
+## Gimbal example
 
 <!-- Below is an example of the use of the IMU to build a gimbal, allowing image stabilisation in two axes -->

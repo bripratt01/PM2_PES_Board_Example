@@ -116,6 +116,7 @@ int main()
                 servo_pitch.setNormalisedPulseWidth(0.5f);
             }
         }
+
         // toggling the user led
         user_led = !user_led;
 
